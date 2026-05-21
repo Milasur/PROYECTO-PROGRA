@@ -1,0 +1,51 @@
+import random
+
+def generar_contrasena_numerica(longitud: int) -> str:
+    """
+    Genera una contraseña numérica simple.
+
+    Restricciones:
+    - La longitud debe ser mayor que 3.
+    - Solo se usan dígitos del 0 al 9.
+    - Cada dígito puede repetirse como máximo 3 veces.
+    - Se considera una contraseña de baja seguridad.
+
+    Args:
+        longitud: Cantidad de dígitos deseada.
+
+    Returns:
+        Cadena de dígitos aleatorios.
+
+    Raises:
+        ValueError: Si la longitud no es mayor que 3.
+    """
+    if longitud <= 3:
+        raise ValueError("La longitud debe ser mayor que 3.")
+
+    MAX_REPETICIONES = 3
+    conteo = {}
+    digitos = []
+
+    for _ in range(longitud):
+        disponibles = [d for d in range(10) if conteo.get(d, 0) < MAX_REPETICIONES]
+        if not disponibles:
+            break
+        elegido = random.choice(disponibles)
+        digitos.append(str(elegido))
+        conteo[elegido] = conteo.get(elegido, 0) + 1
+
+    return "".join(digitos)
+
+
+if __name__ == "__main__":
+    casos_de_prueba = [4, 6]
+
+    for longitud in casos_de_prueba:
+        resultado = generar_contrasena_numerica(longitud)
+        print(f"Longitud {longitud}: {resultado}")
+
+    # Prueba con longitud inválida
+    try:
+        generar_contrasena_numerica(3)
+    except ValueError as e:
+        print(f"Error esperado: {e}")
