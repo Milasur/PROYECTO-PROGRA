@@ -3,28 +3,30 @@ import string
 
 # Se definen variables que se usarán en todas las funciones.
 
-mayusculas = string.ascii_uppercase
-minusculas = string.ascii_lowercase
-digitos = string.digits
-simbolos = "!@#$%&*"
+MAYUSCULAS = string.ascii_uppercase
+MINUSCULAS = string.ascii_lowercase
+DIGITOS = string.digits
+SIMBOLOS = "!@#$%&*"
 
 # Funcion 1: generar_contraseña
-'''Entradas: longitud (int)
+
+"""
+Entradas: longitud (int)
 Salidas: contraseña (str)
-Restricciones: La longitud debe ser mayor que 3,  solo se deben utilizar dígitos del 0 al 9, debe considerarse una contraseña de baja seguridad,
+Restricciones: La longitud debe ser mayor que 3,
+solo se deben utilizar dígitos del 0 al 9, debe considerarse una contraseña
+de baja seguridad,
 cada dígito se podrá repetir a lo sumo 3 veces.
-'''
+"""
 
 
 def generar_contraseña_numerica(longitud):
     contraseña = ""
     for i in range(longitud):
-        dígito_aleatorio = random.randint(0, 9)
-        contraseña += str(dígito_aleatorio)
+        digito_aleatorio = random.randint(0, 9)
+        contraseña += str(digito_aleatorio)
     return contraseña
 
-
-print(generar_contraseña_numerica(8))
 
 # Funcion 2: generar_contraseña_letras
 '''Entradas: longitud (int)
@@ -41,13 +43,14 @@ def generar_contraseña_letras(longitud):
     return contraseña
 
 
-print(generar_contraseña_letras(8))
-
 # Funcion 3: generar_contraseña_alfanumerica
-'''Entradas: longitud (int)
+"""
+Entradas: longitud (int)
 Salidas: generar_contraseña_alfanumerica (str)
-Restricciones: La longitud minima debe ser 6,  debe conteener al menos una letra minuscula, debe de tener al menos un numero, sin simbolos
-'''
+Restricciones: La longitud minima debe ser 6,
+debe conteener al menos una letra minuscula, debe de tener al menos un numero,
+sin simbolos
+"""
 
 
 def generar_contraseña_alfanumerica(longitud):
@@ -57,24 +60,20 @@ def generar_contraseña_alfanumerica(longitud):
             letra_aleatoria = random.choice("abcdefghijklmnopqrstuvwxyz")
             contraseña += letra_aleatoria
         else:
-            dígito_aleatorio = random.randint(0, 9)
-            contraseña += str(dígito_aleatorio)
+            digito_aleatorio = random.randint(0, 9)
+            contraseña += str(digito_aleatorio)
     return contraseña
 
 
-print(generar_contraseña_alfanumerica(8))
-
 # Funcion 4 -  Contraseña Robusta
-
-
 """
 ENTRADAS:
-Longitud deseada de la contraeña (int) 
+Longitud deseada de la contraeña (int)
 SALIDAS:
-Una contraseña robusta (str) 
+Una contraseña robusta (str)
 RESTRICCIONES:
 La longitud debe ser al menos 10 caracteres.
-Debe incluir al menos una letra mayúscula, una letra minúscula, 
+Debe incluir al menos una letra mayúscula, una letra minúscula,
 un número y un simbolo ( @ # $ % & *)
 """
 
@@ -83,3 +82,20 @@ def generar_contraseña_robusta(longitud):
     if longitud < 10:
         raise ValueError("La longitud de la contraseña debe ser de al menos 10 "
                          "caracteres para que sea robusta.")
+    digito_aleatorio = random.choice(DIGITOS)
+    mayuscula_aleatoria = random.choice(MAYUSCULAS)
+    minuscula_aleatoria = random.choice(MINUSCULAS)
+    simbolo_aleatorio = random.choice(SIMBOLOS)
+    caracteres_posibles = MAYUSCULAS + MINUSCULAS + DIGITOS + SIMBOLOS
+    contrasena_robusta = [digito_aleatorio, mayuscula_aleatoria,
+                          minuscula_aleatoria, simbolo_aleatorio]
+    for i in range(longitud - 4):
+        contrasena_robusta += [random.choice(caracteres_posibles)]
+    random.shuffle(contrasena_robusta)
+    contrasena_robusta = "".join(contrasena_robusta)
+    return contrasena_robusta
+
+
+if __name__ == "__main__":
+    print(generar_contraseña_robusta(12))
+    print(generar_contraseña_robusta(8))
