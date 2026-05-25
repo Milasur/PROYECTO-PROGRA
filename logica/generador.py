@@ -1,12 +1,15 @@
 import random
+import string
+
+# Se definen variables que se usarán en todas las funciones.
+
+mayusculas = string.ascii_uppercase
+minusculas = string.ascii_lowercase
+digitos = string.digits
+simbolos = "!@#$%&*"
 
 # Funcion 1: generar
 
-
-def generar():
-    print("Generando el código...")
-    # Aquí puedes agregar la lógica para generar el código
-    print("Código generado exitosamente.")
 
 # Funcion 4 -  Contraseña Robusta
 
@@ -18,15 +21,12 @@ SALIDAS:
 Una contraseña robusta (str) 
 RESTRICCIONES:
 La longitud debe ser al menos 10 caracteres.
-Debe incluir al menos una letra mayúscula, una letra minúscula, un número y un simbolo ( @ # $ % & *)
+Debe incluir al menos una letra mayúscula, una letra minúscula, 
+un número y un simbolo ( @ # $ % & *)
 """
 
 
 def generar_contraseña_robusta(longitud):
-
-    # Casos de prueba:
-
-
-print(generar_contraseña_robusta(12))  # Ejemplo de salida: "A1b@C3d$E5f"
-# Ejemplo de salida: "Error: La longitud debe ser al menos 10 caracteres."
-print(generar_contraseña_robusta(8))
+    if longitud < 10:
+        raise ValueError("La longitud de la contraseña debe ser de al menos 10 "
+                         "caracteres para que sea robusta.")
