@@ -63,8 +63,6 @@ def generar_contraseña_alfanumerica(longitud):
 
 
 print(generar_contraseña_alfanumerica(8))
-# Funcion 1: generar
-
 
 # Funcion 4 -  Contraseña Robusta
 
