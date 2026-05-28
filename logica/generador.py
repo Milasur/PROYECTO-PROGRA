@@ -1,3 +1,4 @@
+# Se importan las librerías que se van a usar.
 import random
 import string
 
@@ -29,10 +30,13 @@ def generar_contraseña_numerica(longitud):
 
 
 # Funcion 2: generar_contraseña_letras
-'''Entradas: longitud (int)
+"""
+Entradas: longitud (int)
 Salidas: generar_contraseña_letras (str)
-Restricciones: La longitud debe ser mayor que 3,  solo se deben utilizar letras minúsculas, no debe incluir números ni símbolos
-'''
+Restricciones: La longitud debe ser mayor que 3,
+solo se deben utilizar letras minúsculas,
+no debe incluir números ni símbolos
+"""
 
 
 def generar_contraseña_letras(longitud):
@@ -65,16 +69,16 @@ def generar_contraseña_alfanumerica(longitud):
     return contraseña
 
 
-# Funcion 4 -  Contraseña Robusta
+# Funcion 4 - Contraseña Robusta
 """
 ENTRADAS:
-Longitud deseada de la contraeña (int)
+    longitud (int): longitud deseada de la contraseña
 SALIDAS:
-Una contraseña robusta (str)
+    Una contraseña robusta (str)
 RESTRICCIONES:
-La longitud debe ser al menos 10 caracteres.
-Debe incluir al menos una letra mayúscula, una letra minúscula,
-un número y un simbolo ( @ # $ % & *)
+    La longitud debe ser al menos 10 caracteres.
+    Debe incluir al menos una letra mayúscula, una letra minúscula,
+    un número y un simbolo ( ! @ # $ % & *)
 """
 
 
@@ -96,11 +100,7 @@ def generar_contraseña_robusta(longitud):
     return contrasena_robusta
 
 
-if __name__ == "__main__":
-    print(generar_contraseña_robusta(12))
-
 # Funcion 5 - Contraseña desde frase
-
 """
 ENTRADAS:
     frase (str): frase de al menos 5 palabras
@@ -130,7 +130,46 @@ def generar_contraseña_desde_frase(frase, simbolo):
     return contraseña
 
 
+# Funcion 6 - Contraseña desde frase aleatoria
+"""
+ENTRADAS:
+    frase (str): frase de al menos 5 palabras
+    simbolo (str): símbolo que se agrega al final de la contraseña
+SALIDAS:
+    Una contraseña basada en la frase (str)
+RESTRICCIONES:
+    La frase debe contener al menos 5 palabras.
+    Se toma un carácter aleatorio de cada palabra.
+    Si la frase contiene números, estos se conservan en el orden en que aparecen.
+    El símbolo debe ser uno de: ! @ # $ % & *
+    El símbolo se agrega al final de la contraseña.
+"""
+
+
+def generar_contraseña_desde_frase_aleatoria(frase, simbolo):
+    palabras = frase.split()
+    contraseña = ""
+    if len(palabras) < 5:
+        raise ValueError("La frase debe tener al menos 5 palabras.")
+    for palabra in palabras:
+        if palabra.isdigit():
+            contraseña += palabra
+        else:
+            contraseña += random.choice(palabra)
+    contraseña += simbolo
+    return contraseña
+
+
 if __name__ == "__main__":
-    print(generar_contraseña_desde_frase("Hola me llamo Josu CR", "!"))
+    print(generar_contraseña_robusta(12))
+    try:
+        print(generar_contraseña_robusta(8))
+    except ValueError as error:
+        print(f"Falló lo que tenía que fallar: {error}")
+    print(generar_contraseña_desde_frase("Me llamo Josué Valles Sánchez", "!"))
     print(generar_contraseña_desde_frase("Mi clave es 42 segura hoy", "#"))
-    print(generar_contraseña_desde_frase("corta frase", "@"))
+    try:
+        print(generar_contraseña_desde_frase("corta frase", "@"))
+    except ValueError as error:
+        print(f"Falló lo que tenía que fallar {error}")
+    print(generar_contraseña_desde_frase_aleatoria("Hola me llamo Josu XD", "!"))
