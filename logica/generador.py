@@ -38,7 +38,7 @@ Restricciones: La longitud debe ser mayor que 3,  solo se deben utilizar letras 
 def generar_contraseña_letras(longitud):
     contraseña = ""
     for i in range(longitud):
-        letra_aleatoria = random.choice("abcdefghijklmnopqrstuvwxyz")
+        letra_aleatoria = random.choice(MINUSCULAS)
         contraseña += letra_aleatoria
     return contraseña
 
@@ -57,7 +57,7 @@ def generar_contraseña_alfanumerica(longitud):
     contraseña = ""
     for i in range(longitud):
         if i % 2 == 0:
-            letra_aleatoria = random.choice("abcdefghijklmnopqrstuvwxyz")
+            letra_aleatoria = random.choice(MINUSCULAS)
             contraseña += letra_aleatoria
         else:
             digito_aleatorio = random.randint(0, 9)
@@ -98,4 +98,39 @@ def generar_contraseña_robusta(longitud):
 
 if __name__ == "__main__":
     print(generar_contraseña_robusta(12))
-    print(generar_contraseña_robusta(8))
+
+# Funcion 5 - Contraseña desde frase
+
+"""
+ENTRADAS:
+    frase (str): frase de al menos 5 palabras
+    simbolo (str): símbolo que se agrega al final de la contraseña
+SALIDAS:
+    Una contraseña basada en la frase (str)
+RESTRICCIONES:
+    La frase debe contener al menos 5 palabras.
+    Se toma la letra inicial de cada palabra.
+    Si la frase contiene números, estos se conservan en el orden en que aparecen.
+    El símbolo debe ser uno de: ! @ # $ % & *
+    El símbolo se agrega al final de la contraseña.
+"""
+
+
+def generar_contraseña_desde_frase(frase, simbolo):
+    palabras = frase.split()
+    contraseña = ""
+    if len(palabras) < 5:
+        raise ValueError("La frase debe tener al menos 5 palabras.")
+    for palabra in palabras:
+        if palabra.isdigit():
+            contraseña += palabra
+        else:
+            contraseña += palabra[0]
+    contraseña += simbolo
+    return contraseña
+
+
+if __name__ == "__main__":
+    print(generar_contraseña_desde_frase("Hola me llamo Josu CR", "!"))
+    print(generar_contraseña_desde_frase("Mi clave es 42 segura hoy", "#"))
+    print(generar_contraseña_desde_frase("corta frase", "@"))
