@@ -1,6 +1,7 @@
 # Se importan las librerías que se van a usar.
 import random
 import string
+from datos.banco_palabras import BANCO
 
 # Se definen variables que se usarán en todas las funciones.
 
@@ -12,12 +13,14 @@ SIMBOLOS = "!@#$%&*"
 # Funcion 1: generar_contraseña
 
 """
-Entradas: longitud (int)
-Salidas: contraseña (str)
-Restricciones: La longitud debe ser mayor que 3,
-solo se deben utilizar dígitos del 0 al 9, debe considerarse una contraseña
-de baja seguridad,
-cada dígito se podrá repetir a lo sumo 3 veces.
+Entradas: 
+    longitud (int)
+Salidas:    
+    contraseña (str)
+Restricciones: 
+    La longitud debe ser mayor que 3,
+    solo se deben utilizar dígitos del 0 al 9, debe considerarse una contraseña
+    de baja seguridad,cada dígito se podrá repetir a lo sumo 3 veces.
 """
 
 
@@ -31,11 +34,14 @@ def generar_contraseña_numerica(longitud):
 
 # Funcion 2: generar_contraseña_letras
 """
-Entradas: longitud (int)
-Salidas: generar_contraseña_letras (str)
-Restricciones: La longitud debe ser mayor que 3,
-solo se deben utilizar letras minúsculas,
-no debe incluir números ni símbolos
+Entradas: 
+    longitud (int)
+Salidas: 
+    generar_contraseña_letras (str)
+Restricciones: 
+    La longitud debe ser mayor que 3,
+    solo se deben utilizar letras minúsculas,
+    no debe incluir números ni símbolos
 """
 
 
@@ -49,11 +55,14 @@ def generar_contraseña_letras(longitud):
 
 # Funcion 3: generar_contraseña_alfanumerica
 """
-Entradas: longitud (int)
-Salidas: generar_contraseña_alfanumerica (str)
-Restricciones: La longitud minima debe ser 6,
-debe conteener al menos una letra minuscula, debe de tener al menos un numero,
-sin simbolos
+Entradas: 
+    longitud (int)
+Salidas: 
+    generar_contraseña_alfanumerica (str)
+Restricciones: 
+    La longitud minima debe ser 6,
+    debe conteener al menos una letra minuscula, 
+    debe de tener al menos un numero, sin simbolos
 """
 
 
@@ -159,6 +168,39 @@ def generar_contraseña_desde_frase_aleatoria(frase, simbolo):
     contraseña += simbolo
     return contraseña
 
+# Funcion 7 -  Generación de passphrase
+
+
+"""
+ENTRADAS:
+    Cantidad de palabras que se tomarán del banco de palabras. (int)
+    Símbolo separador de entre "-_!#" (string)
+    Número que irá al final de la contraseña (int)
+SALIDAS:
+    Contraseña generada incluyendo las palabras tomadas del banco,
+    el símbolo separador, y el número proporcionados por el usuario en la entrada (string)
+RESTRICCIONES:
+    Deben ser al menos 3 palabras.
+    Las palabras deben seleccionarse desde un banco predefinido en datos/banco_palabras.py
+    El seperador debe ser alguno entre "-_!#"
+    Debe agregar al menos un número.
+
+"""
+
+
+def generar_contraseña_passphrase(cantidad_palabras, separador, numero_final):
+    SEPARADORES = "-_!#"
+    contraseña = ""
+    if cantidad_palabras < 3:
+        raise ValueError("Deben ser al menos 3 palabras.")
+    if separador not in SEPARADORES:
+        raise ValueError("El separador debe ser uno de: - _ ! #")
+    palabras_elegidas = random.sample(BANCO, cantidad_palabras)
+    for palabra in palabras_elegidas:
+        contraseña += palabra + separador
+    contraseña += str(numero_final)
+    return contraseña
+
 
 if __name__ == "__main__":
     print(generar_contraseña_robusta(12))
@@ -173,3 +215,9 @@ if __name__ == "__main__":
     except ValueError as error:
         print(f"Falló lo que tenía que fallar {error}")
     print(generar_contraseña_desde_frase_aleatoria("Hola me llamo Josu XD", "!"))
+    print(generar_contraseña_passphrase(3, "-", 78))
+    try:
+        print(generar_contraseña_passphrase(2, "-", 78))
+    except ValueError as error:
+        print(f"Falló lo que tenía que fallar {error}")
+    print(generar_contraseña_passphrase(5, "-", 78))
