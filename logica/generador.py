@@ -230,38 +230,36 @@ def evaluar_fortaleza_contraseña(contraseña):
             aparicionesMayusculas += 1
     if aparicionesMayusculas == 0:
         puntuacion += -1
-    elif aparicionesMayusculas >= 1:
-        puntuacion += 1
     elif aparicionesMayusculas >= 3:
         puntuacion += 3
+    elif aparicionesMayusculas >= 1:
+        puntuacion += 1
 
     aparicionesMinusculas = 0
     
     for caracteres in contraseña:
         if caracteres in MINUSCULAS:
             aparicionesMinusculas += 1
-            if aparicionesMinusculas == 0:
-                puntuacion += -1
-        if aparicionesMinusculas == 0:
+    if aparicionesMinusculas == 0:
             puntuacion += -1
-        elif aparicionesMinusculas >= 1:
-            puntuacion += 1
-        elif aparicionesMinusculas >= 3:
+    elif aparicionesMinusculas >= 3:
             puntuacion += 3
+    elif aparicionesMinusculas >= 1:
+            puntuacion += 1
         
     aparicionesDigitos = 0
     
     for digitos in contraseña:
         if digitos in DIGITOS:
             aparicionesDigitos += 1
-        if aparicionesDigitos == 0:
-            puntuacion += -2
-        elif aparicionesDigitos >= 1:
-            puntuacion += 1
-        elif aparicionesDigitos >= 3:
-            puntuacion += 2
-        elif aparicionesDigitos >= 5:
-            puntuacion += 3
+    if aparicionesDigitos == 0:
+        puntuacion += -1
+    elif aparicionesDigitos >= 1:
+        puntuacion += 1
+    elif aparicionesDigitos >= 3:
+        puntuacion += 2
+    elif aparicionesDigitos >= 5:
+        puntuacion += 3
 
     aparicionesSimbolos = 0
     for simbolo in contraseña:
@@ -273,7 +271,7 @@ def evaluar_fortaleza_contraseña(contraseña):
         puntuacion += 1
     elif aparicionesSimbolos >= 3:
         puntuacion += 3
-
+    return puntuacion
     
   
 if __name__ == "__main__":
