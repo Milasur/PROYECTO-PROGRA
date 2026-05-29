@@ -25,6 +25,8 @@ Restricciones:
 
 
 def generar_contraseña_numerica(longitud):
+    if longitud <= 3:
+        raise ValueError("La longitud de la contraseña debe ser mayor que 3.")
     contraseña = ""
     for i in range(longitud):
         digito_aleatorio = random.randint(0, 9)
@@ -46,6 +48,8 @@ Restricciones:
 
 
 def generar_contraseña_letras(longitud):
+    if longitud <= 3:
+        raise ValueError("La longitud de la contraseña debe ser mayor que 3.")
     contraseña = ""
     for i in range(longitud):
         letra_aleatoria = random.choice(MINUSCULAS)
@@ -67,16 +71,16 @@ Restricciones:
 
 
 def generar_contraseña_alfanumerica(longitud):
+    if longitud < 6:
+        raise ValueError("La longitud de la contraseña debe ser de al menos 6 caracteres.")
+    minuscula_aleatoria = random.choice(MINUSCULAS)
+    digito_aleatorio = random.choice(DIGITOS)
     contraseña = ""
-    for i in range(longitud):
-        if i % 2 == 0:
-            letra_aleatoria = random.choice(MINUSCULAS)
-            contraseña += letra_aleatoria
-        else:
-            digito_aleatorio = random.randint(0, 9)
-            contraseña += str(digito_aleatorio)
+    for i in range(longitud - 2):
+        caracter_aleatorio = random.choice(MINUSCULAS + DIGITOS)
+        contraseña += caracter_aleatorio
+    contraseña = minuscula_aleatoria + digito_aleatorio + contraseña
     return contraseña
-
 
 # Funcion 4 - Contraseña Robusta
 """
@@ -203,6 +207,7 @@ def generar_contraseña_passphrase(cantidad_palabras, separador, numero_final):
 
 
 if __name__ == "__main__":
+    print(generar_contraseña_alfanumerica(8))
     print(generar_contraseña_robusta(12))
     try:
         print(generar_contraseña_robusta(8))
