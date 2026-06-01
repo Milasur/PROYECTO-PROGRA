@@ -1,0 +1,3 @@
+import tkinter as tk
+from logica.generador import generar_contraseña_alfanumerica, generar_contraseña_robusta, generar_contraseña_desde_frase, generar_contraseña_desde_frase_aleatoria, generar_contraseña_passphrase
+from logica.evaluador import evaluar_fortaleza_contraseña
