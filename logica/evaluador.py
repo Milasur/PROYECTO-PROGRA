@@ -22,52 +22,52 @@ def evaluar_fortaleza_contraseña(contraseña):
         puntuacion += 2
     if len(contraseña) >= 10:
         puntuacion += 3
-    aparicionesMayusculas = 0
+    apariciones_mayusculas = 0
 
     for caracteres in contraseña:
         if caracteres in MAYUSCULAS:
-            aparicionesMayusculas += 1
-    if aparicionesMayusculas == 0:
+            apariciones_mayusculas += 1
+    if apariciones_mayusculas == 0:
         puntuacion += -1
-    elif aparicionesMayusculas >= 3:
+    elif apariciones_mayusculas >= 3:
         puntuacion += 3
-    elif aparicionesMayusculas >= 1:
+    elif apariciones_mayusculas >= 1:
         puntuacion += 1
 
-    aparicionesMinusculas = 0
+    apariciones_minusculas = 0
 
     for caracteres in contraseña:
         if caracteres in MINUSCULAS:
-            aparicionesMinusculas += 1
-    if aparicionesMinusculas == 0:
+            apariciones_minusculas += 1
+    if apariciones_minusculas == 0:
         puntuacion += -1
-    elif aparicionesMinusculas >= 3:
+    elif apariciones_minusculas >= 3:
         puntuacion += 3
-    elif aparicionesMinusculas >= 1:
+    elif apariciones_minusculas >= 1:
         puntuacion += 1
 
-    aparicionesDigitos = 0
+    apariciones_digitos = 0
 
     for digitos in contraseña:
         if digitos in DIGITOS:
-            aparicionesDigitos += 1
-    if aparicionesDigitos == 0:
+            apariciones_digitos += 1
+    if apariciones_digitos == 0:
         puntuacion += -1
-    elif aparicionesDigitos >= 1:
+    elif apariciones_digitos >= 1:
         puntuacion += 1
-    elif aparicionesDigitos >= 3:
+    elif apariciones_digitos >= 3:
         puntuacion += 2
-    elif aparicionesDigitos >= 5:
+    elif apariciones_digitos >= 5:
         puntuacion += 3
 
-    aparicionesSimbolos = 0
+    apariciones_simbolos = 0
     for simbolo in contraseña:
         if simbolo in SIMBOLOS:
-            aparicionesSimbolos += 1
-    if aparicionesSimbolos == 0:
+            apariciones_simbolos += 1
+    if apariciones_simbolos == 0:
         puntuacion += -1
-    elif aparicionesSimbolos >= 1:
+    elif apariciones_simbolos >= 1:
         puntuacion += 1
-    elif aparicionesSimbolos >= 3:
+    elif apariciones_simbolos >= 3:
         puntuacion += 3
     return puntuacion
