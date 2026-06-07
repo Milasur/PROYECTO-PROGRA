@@ -13,14 +13,14 @@ SIMBOLOS = "!@#$%&*"
 # Funcion 1: generar_contraseña
 
 """
-Entradas:
+Entradas: 
     longitud (int)
-Salidas:
+Salidas:    
     contraseña (str)
-Restricciones:
+Restricciones: 
     La longitud debe ser mayor que 3,
     solo se deben utilizar dígitos del 0 al 9, debe considerarse una contraseña
-    de baja seguridad,cada dígito se podrá repetir a lo sumo 3 veces.
+    de baja segurida    d,cada dígito se podrá repetir a lo sumo 3 veces.
 """
 
 
@@ -36,11 +36,11 @@ def generar_contraseña_numerica(longitud):
 
 # Funcion 2: generar_contraseña_letras
 """
-Entradas:
+Entradas: 
     longitud (int)
-Salidas:
+Salidas: 
     generar_contraseña_letras (str)
-Restricciones:
+Restricciones: 
     La longitud debe ser mayor que 3,
     solo se deben utilizar letras minúsculas,
     no debe incluir números ni símbolos
@@ -59,13 +59,13 @@ def generar_contraseña_letras(longitud):
 
 # Funcion 3: generar_contraseña_alfanumerica
 """
-Entradas:
+Entradas: 
     longitud (int)
-Salidas:
+Salidas: 
     generar_contraseña_alfanumerica (str)
-Restricciones:
+Restricciones: 
     La longitud minima debe ser 6,
-    debe conteener al menos una letra minuscula,
+    debe conteener al menos una letra minuscula, 
     debe de tener al menos un numero, sin simbolos
 """
 
