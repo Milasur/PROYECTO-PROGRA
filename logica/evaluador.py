@@ -2,7 +2,8 @@ from logica.generador import MAYUSCULAS
 from logica.generador import MINUSCULAS
 from logica.generador import DIGITOS
 from logica.generador import SIMBOLOS
-
+from datos.patrones import SECUENCIAS_NUMERICAS, PATRONES_COMUNES, CARACTERES_REPETIDOS
+from datos.palabras_comunes import PALABRAS_COMUNES
 # Funcion 8: Evaluar la fortaleza de una contraseña
 '''
 ENTRADAS:
@@ -58,7 +59,7 @@ def evaluar_fortaleza_contraseña(contraseña):
             apariciones_digitos += 1
 
     if apariciones_digitos == 0:
-        puntuacion += -1
+        puntuacion += -2
     elif apariciones_digitos >= 5:
         puntuacion += 3
     elif apariciones_digitos >= 3:
@@ -77,4 +78,29 @@ def evaluar_fortaleza_contraseña(contraseña):
         puntuacion += 3
     elif apariciones_simbolos >= 1:
         puntuacion += 1
+    return puntuacion
+
+    if puntuacion <= 5:
+        return "Contraseña muy débil"
+    elif puntuacion <= 8:
+        return "Contraseña Media"
+    elif puntuacion <= 12:
+        return "Contraseña Fuerte"
+    else:
+        return "Contraseña Muy Fuerte"
+
+
+def deteccion_patrones_inseguros(contraseña):
+    for patron in SECUENCIAS_NUMERICAS:
+        if patron in contraseña:
+            puntuacion -= 1
+    for palabra in PATRONES_COMUNES:
+        if palabra in contraseña:
+            puntuacion -= 1
+    for caracter in CARACTERES_REPETIDOS:
+        if caracter in contraseña:
+            puntuacion -= 1
+    for palabra in PALABRAS_COMUNES:
+        if palabra in contraseña:
+            puntuacion -= 1
     return puntuacion
