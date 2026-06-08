@@ -92,7 +92,7 @@ def evaluar_fortaleza_contraseña(contraseña):
         return "Contraseña Muy Fuerte"
 
 
-# Funcion 8: Evaluar la fortaleza de una contraseña
+# Funcion 9: Evaluar la fortaleza de una contraseña
 '''
 ENTRADAS:
     contraseña (str): contraseña a evaluar
