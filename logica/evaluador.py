@@ -83,13 +83,15 @@ def evaluar_fortaleza_contraseña(contraseña):
     puntuacion += deteccion_patrones_inseguros(contraseña)
 
     if puntuacion <= 5:
-        return "Contraseña muy débil"
+        clase = "Contraseña muy débil"
     elif puntuacion <= 8:
-        return "Contraseña Media"
+        clase = "Contraseña Media"
     elif puntuacion <= 12:
-        return "Contraseña Fuerte"
+        clase = "Contraseña Fuerte"
     else:
-        return "Contraseña Muy Fuerte"
+        clase = "Contraseña Muy Fuerte"
+
+    return clase, puntuacion
 
 
 # Funcion 9: Evaluar la fortaleza de una contraseña
