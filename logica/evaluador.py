@@ -80,7 +80,7 @@ def evaluar_fortaleza_contraseña(contraseña):
     elif apariciones_simbolos >= 1:
         puntuacion += 1
 
-    puntuacion += deteccion_patrones_inseguros(contraseña)
+    puntuacion += deteccion_patrones_inseguros(contraseña.lower())
 
     if puntuacion <= 5:
         clase = "Contraseña muy débil"
@@ -105,21 +105,24 @@ RESTRICCIONES:
     Tipos de caracteres: mayúsculas, minúsculas, dígitos, símbolos.'''
 
 
-def deteccion_patrones_inseguros(contraseña):
+TODOS_LOS_PATRONES = SECUENCIAS_NUMERICAS + \
+    PATRONES_COMUNES + CARACTERES_REPETIDOS + PALABRAS_COMUNES
+
+
+def deteccion_patrones_inseguros(contraseña, patrones=TODOS_LOS_PATRONES, indice=0, puntuacion=0):
     contraseña = contraseña.lower()
-    puntuacion = 0
-    for patron in SECUENCIAS_NUMERICAS:
-        if patron in contraseña:
-            puntuacion -= 1
-    for palabra in PATRONES_COMUNES:
-        if palabra in contraseña:
-            puntuacion -= 1
-    for caracter in CARACTERES_REPETIDOS:
-        if caracter in contraseña:
-            puntuacion -= 1
-    for palabra in PALABRAS_COMUNES:
-        if palabra in contraseña:
-            puntuacion -= 1
-    if puntuacion == 0:
-        puntuacion = 3
-    return puntuacion
+
+    if indice == len(patrones):
+        if puntuacion == 0:
+            return 3
+        return puntuacion
+
+    if patrones[indice] in contraseña:
+        puntuacion -= 1
+
+    return deteccion_patrones_inseguros(
+        contraseña,
+        patrones,
+        indice + 1,
+        puntuacion
+    )

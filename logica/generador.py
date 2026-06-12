@@ -70,21 +70,23 @@ Restricciones:
 """
 
 
-def generar_contraseña_alfanumerica(longitud):
-    if longitud < 6:
-        raise ValueError(
-            "La longitud de la contraseña debe ser de al menos 6 caracteres.")
-    minuscula_aleatoria = random.choice(MINUSCULAS)
-    digito_aleatorio = random.choice(DIGITOS)
-    contraseña = ""
-    for i in range(longitud - 2):
-        caracter_aleatorio = random.choice(MINUSCULAS + DIGITOS)
-        contraseña += caracter_aleatorio
-    contraseña = minuscula_aleatoria + digito_aleatorio + contraseña
-    return contraseña
+def generar_contraseña_alfanumerica(longitud, contraseña="", inicio=True):
+    if inicio:
+        if longitud < 6:
+            raise ValueError(
+                "La longitud de la contraseña debe ser de al menos 6 caracteres.")
+        minuscula_aleatoria = random.choice(MINUSCULAS)
+        digito_aleatorio = random.choice(DIGITOS)
+        return generar_contraseña_alfanumerica(longitud - 2, minuscula_aleatoria + digito_aleatorio, False)
+
+    if longitud == 0:
+        return contraseña
+
+    caracter_aleatorio = random.choice(MINUSCULAS + DIGITOS)
+    return generar_contraseña_alfanumerica(longitud - 1, contraseña + caracter_aleatorio, False)
 
 
-# Funcion 4 - Contraseña Robusta
+    # Funcion 4 - Contraseña Robusta
 """
 ENTRADAS:
     longitud (int): longitud deseada de la contraseña
@@ -204,6 +206,35 @@ def generar_contraseña_passphrase(cantidad_palabras, separador, numero_final):
     palabras_elegidas = random.sample(BANCO, cantidad_palabras)
     for palabra in palabras_elegidas:
         contraseña += palabra + separador
+    contraseña += str(numero_final)
+    return contraseña
+
+# Función 13 - Contraseña Leetspeak compuesta de palabras
+
+
+def generar_contraseña_leetspeak(frase, numero_final):
+    contraseña = ""
+    frase = frase.split()
+    if len(frase) < 3:
+        raise ValueError("La frase debe tener al menos 3 palabras.")
+    for palabra in frase:
+        palabra = palabra.capitalize()
+        for caracter in palabra:
+            if caracter.lower() == 'a':
+                contraseña += '@'
+            elif caracter.lower() == 'e':
+                contraseña += '3'
+            elif caracter.lower() == 'i':
+                contraseña += '1'
+            elif caracter.lower() == 'o':
+                contraseña += '0'
+            elif caracter.lower() == 's':
+                contraseña += '$'
+            elif caracter.lower() == 't':
+                contraseña += '7'
+            else:
+                contraseña += caracter
+        contraseña += random.choice(SIMBOLOS)
     contraseña += str(numero_final)
     return contraseña
 
