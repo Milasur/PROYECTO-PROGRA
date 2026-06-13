@@ -78,7 +78,7 @@ def registrar_contrasena(contrasena: str, algoritmo: str,
     with open(ARCHIVO_HISTORIAL, "w", encoding="utf-8") as archivo:
         archivo.write(contenido_cifrado)
 
-    print(f"✅ Contraseña registrada en el historial ({ARCHIVO_HISTORIAL})")
+    print(f"Contraseña registrada en el historial ({ARCHIVO_HISTORIAL})")
 
 
 def cargar_historial() -> list:
@@ -115,11 +115,11 @@ def mostrar_historial() -> None:
 
     for i, registro in enumerate(historial, start=1):
         print(f"\n  Registro #{i}")
-        print(f"Fecha      : {registro['fecha']}")
-        print(f"Contraseña : {registro['contrasena']}")
-        print(f"Algoritmo  : {registro['algoritmo']}")
-        print(f"Longitud   : {registro['longitud']}")
-        print(f"Fortaleza  : {registro['fortaleza']}")
+        print(f"  Fecha      : {registro['fecha']}")
+        print(f"  Contraseña : {registro['contrasena']}")
+        print(f"  Algoritmo  : {registro['algoritmo']}")
+        print(f"  Longitud   : {registro['longitud']}")
+        print(f"  Fortaleza  : {registro['fortaleza']}")
         print("  " + "-" * 56)
 
     print(f"\n  Total de registros: {len(historial)}")

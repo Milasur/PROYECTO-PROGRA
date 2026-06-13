@@ -4,6 +4,7 @@ from tkinter import messagebox
 from logica import generador
 from logica import evaluador
 from logica import ataques
+from logica import historial
 
 # ── Paleta de colores ──────────────────────────────────────────────────────────
 BG       = "#0D1B2A"   # fondo oscuro principal
@@ -68,6 +69,8 @@ def abrir_f1(raiz):
             res = generador.generar_contraseña_numerica(int(e_long.get()))
             e_res.delete(0, tk.END)
             e_res.insert(0, res)
+            clase, _ = evaluador.evaluar_fortaleza_contraseña(res)
+            historial.registrar_contrasena(res, "Numérica Simple", len(res), clase)
         except ValueError as err:
             messagebox.showerror("Error", str(err), parent=v)
 
@@ -91,6 +94,8 @@ def abrir_f2(raiz):
             res = generador.generar_contraseña_letras(int(e_long.get()))
             e_res.delete(0, tk.END)
             e_res.insert(0, res)
+            clase, _ = evaluador.evaluar_fortaleza_contraseña(res)
+            historial.registrar_contrasena(res, "Alfabética Simple", len(res), clase)
         except ValueError as err:
             messagebox.showerror("Error", str(err), parent=v)
 
@@ -114,6 +119,8 @@ def abrir_f3(raiz):
             res = generador.generar_contraseña_alfanumerica(int(e_long.get()))
             e_res.delete(0, tk.END)
             e_res.insert(0, res)
+            clase, _ = evaluador.evaluar_fortaleza_contraseña(res)
+            historial.registrar_contrasena(res, "Alfanumérica", len(res), clase)
         except ValueError as err:
             messagebox.showerror("Error", str(err), parent=v)
 
@@ -137,6 +144,8 @@ def abrir_f4(raiz):
             res = generador.generar_contraseña_robusta(int(e_long.get()))
             e_res.delete(0, tk.END)
             e_res.insert(0, res)
+            clase, _ = evaluador.evaluar_fortaleza_contraseña(res)
+            historial.registrar_contrasena(res, "Robusta", len(res), clase)
         except ValueError as err:
             messagebox.showerror("Error", str(err), parent=v)
 
@@ -164,6 +173,8 @@ def abrir_f5(raiz):
             res = generador.generar_contraseña_desde_frase(e_frase.get(), e_simbolo.get())
             e_res.delete(0, tk.END)
             e_res.insert(0, res)
+            clase, _ = evaluador.evaluar_fortaleza_contraseña(res)
+            historial.registrar_contrasena(res, "Basada en Frase", len(res), clase)
         except ValueError as err:
             messagebox.showerror("Error", str(err), parent=v)
 
@@ -191,6 +202,8 @@ def abrir_f6(raiz):
             res = generador.generar_contraseña_desde_frase_aleatoria(e_frase.get(), e_simbolo.get())
             e_res.delete(0, tk.END)
             e_res.insert(0, res)
+            clase, _ = evaluador.evaluar_fortaleza_contraseña(res)
+            historial.registrar_contrasena(res, "Frase Aleatoria", len(res), clase)
         except ValueError as err:
             messagebox.showerror("Error", str(err), parent=v)
 
@@ -223,6 +236,8 @@ def abrir_f7(raiz):
                 int(e_cant.get()), e_sep.get(), int(e_num.get()))
             e_res.delete(0, tk.END)
             e_res.insert(0, res)
+            clase, _ = evaluador.evaluar_fortaleza_contraseña(res)
+            historial.registrar_contrasena(res, "Passphrase", len(res), clase)
         except ValueError as err:
             messagebox.showerror("Error", str(err), parent=v)
 
@@ -309,10 +324,79 @@ def abrir_f13(raiz):
             res = generador.generar_contraseña_leetspeak(e_frase.get(), int(e_numero.get()))
             e_res.delete(0, tk.END)
             e_res.insert(0, res)
+            clase, _ = evaluador.evaluar_fortaleza_contraseña(res)
+            historial.registrar_contrasena(res, "Leetspeak Compuesta", len(res), clase)
         except ValueError as err:
             messagebox.showerror("Error", str(err), parent=v)
 
     _btn(v, "Generar", ejecutar).grid(row=2, column=0, columnspan=2, pady=8)
+
+
+def abrir_f11(raiz):
+    """F11 · Historial de contraseñas generadas (cifrado con 3DES)."""
+    v = tk.Toplevel(raiz)
+    v.title("F11 · Historial de Contraseñas")
+    v.geometry("620x420")
+    v.configure(bg=BG_SUB)
+    v.resizable(False, False)
+
+    # Encabezado
+    tk.Label(v, text="Historial de Contraseñas Generadas",
+             bg=BG_SUB, fg=TEXTO, font=F_TITULO).pack(pady=10)
+
+    # Frame con scrollbar para la tabla
+    frame_tabla = tk.Frame(v, bg=BG_SUB)
+    frame_tabla.pack(fill="both", expand=True, padx=14, pady=4)
+
+    scroll_y = tk.Scrollbar(frame_tabla, orient="vertical")
+    scroll_y.pack(side="right", fill="y")
+
+    cols = ("Fecha", "Contraseña", "Algoritmo", "Longitud", "Fortaleza")
+    tabla = tk.Listbox(
+        frame_tabla, bg=ENTRY_BG, fg=TEXTO, font=("Courier", 10),
+        selectbackground=AZUL, activestyle="none",
+        yscrollcommand=scroll_y.set, relief="flat"
+    )
+    tabla.pack(fill="both", expand=True)
+    scroll_y.config(command=tabla.yview)
+
+    # Etiqueta de total
+    lbl_total = tk.Label(v, text="", bg=BG_SUB, fg=TEXTO2,
+                         font=("Helvetica", 9, "italic"))
+    lbl_total.pack(pady=4)
+
+    def cargar():
+        tabla.delete(0, tk.END)
+        try:
+            registros = historial.cargar_historial()
+        except Exception as e:
+            messagebox.showerror("Error", f"No se pudo leer el historial:\n{e}", parent=v)
+            return
+
+        if not registros:
+            tabla.insert(tk.END, "  (El historial está vacío)")
+            lbl_total.config(text="")
+            return
+
+        # Cabecera de columnas
+        tabla.insert(tk.END,
+            f"{'Fecha':<22} {'Contraseña':<18} {'Algoritmo':<22} {'Long':>4}  {'Fortaleza'}")
+        tabla.insert(tk.END, "─" * 85)
+
+        for r in registros:
+            linea = (
+                f"{r['fecha']:<22} "
+                f"{r['contrasena']:<18} "
+                f"{r['algoritmo']:<22} "
+                f"{r['longitud']:>4}  "
+                f"{r['fortaleza']}"
+            )
+            tabla.insert(tk.END, linea)
+
+        lbl_total.config(text=f"Total de registros: {len(registros)}")
+
+    cargar()
+    _btn(v, "↺ Actualizar", cargar).pack(pady=8)
 
 
 # ── Ventana principal ──────────────────────────────────────────────────────────
@@ -320,7 +404,7 @@ def abrir_f13(raiz):
 def iniciar_app():
     ventana = tk.Tk()
     ventana.title("TEC · Gestor de Contraseñas")
-    ventana.geometry("560x480")
+    ventana.geometry("560x560")
     ventana.configure(bg=BG)
     ventana.resizable(False, False)
 
@@ -368,5 +452,17 @@ def iniciar_app():
               activebackground="#C62828", activeforeground="#FFFFFF",
               command=lambda: abrir_f10(ventana)).grid(
         row=7, column=0, columnspan=2, padx=12, pady=5, sticky="ew")
+
+    # Separador historial
+    tk.Label(ventana, text="── Historial ──",
+             bg=BG, fg=TEXTO2, font=("Helvetica", 10, "italic")).grid(
+        row=8, column=0, columnspan=2, pady=8)
+
+    tk.Button(ventana, text="F11 · Ver Historial de Contraseñas",
+              bg="#37474F", fg="#FFFFFF", font=F_BTN,
+              relief="flat", cursor="hand2",
+              activebackground="#263238", activeforeground="#FFFFFF",
+              command=lambda: abrir_f11(ventana)).grid(
+        row=9, column=0, columnspan=2, padx=12, pady=5, sticky="ew")
 
     ventana.mainloop()
