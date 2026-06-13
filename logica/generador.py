@@ -29,8 +29,13 @@ def generar_contraseña_numerica(longitud):
         raise ValueError("La longitud de la contraseña debe ser mayor que 3.")
     contraseña = ""
     for i in range(longitud):
-        digito_aleatorio = random.randint(0, 9)
-        contraseña += str(digito_aleatorio)
+        # Intentar agregar un dígito que no viola la restricción de 3 repeticiones máximas
+        while True:
+            digito_aleatorio = str(random.randint(0, 9))
+            # Verificar que no haya 3 dígitos iguales consecutivos
+            if len(contraseña) < 3 or not (digito_aleatorio == contraseña[-1] == contraseña[-2] == contraseña[-3]):
+                contraseña += digito_aleatorio
+                break
     return contraseña
 
 
@@ -134,6 +139,9 @@ RESTRICCIONES:
 
 
 def generar_contraseña_desde_frase(frase, simbolo):
+    SIMBOLOS_PERMITIDOS = "!@#$%&*"
+    if simbolo not in SIMBOLOS_PERMITIDOS:
+        raise ValueError(f"El símbolo debe ser uno de: {SIMBOLOS_PERMITIDOS}")
     palabras = frase.split()
     contraseña = ""
     if len(palabras) < 5:
@@ -164,6 +172,9 @@ RESTRICCIONES:
 
 
 def generar_contraseña_desde_frase_aleatoria(frase, simbolo):
+    SIMBOLOS_PERMITIDOS = "!@#$%&*"
+    if simbolo not in SIMBOLOS_PERMITIDOS:
+        raise ValueError(f"El símbolo debe ser uno de: {SIMBOLOS_PERMITIDOS}")
     palabras = frase.split()
     contraseña = ""
     if len(palabras) < 5:

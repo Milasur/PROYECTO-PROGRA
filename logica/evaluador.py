@@ -83,7 +83,7 @@ def evaluar_fortaleza_contraseña(contraseña):
     puntuacion += deteccion_patrones_inseguros(contraseña.lower())
 
     if puntuacion <= 5:
-        clase = "Contraseña muy débil"
+        clase = "Contraseña Débil"
     elif puntuacion <= 8:
         clase = "Contraseña Media"
     elif puntuacion <= 12:
@@ -110,14 +110,27 @@ TODOS_LOS_PATRONES = SECUENCIAS_NUMERICAS + \
 
 
 def deteccion_patrones_inseguros(contraseña, patrones=TODOS_LOS_PATRONES, indice=0, puntuacion=0):
-    contraseña = contraseña.lower()
+    # NO convertir a minúsculas la contraseña original para evitar falsos positivos
+    # Solo convertir los patrones al comparar
 
     if indice == len(patrones):
+        # Además de buscar patrones, contar repeticiones de caracteres no numéricos
+        contador_caracteres = {}
+        for char in contraseña:
+            if not char.isdigit():
+                contador_caracteres[char] = contador_caracteres.get(
+                    char, 0) + 1
+
+        # Si hay más de 3 repeticiones de un mismo carácter no numérico, penalizar
+        for char, cuenta in contador_caracteres.items():
+            if cuenta >= 3:
+                puntuacion -= 1
+
         if puntuacion == 0:
             return 3
         return puntuacion
 
-    if patrones[indice] in contraseña:
+    if patrones[indice].lower() in contraseña.lower():
         puntuacion -= 1
 
     return deteccion_patrones_inseguros(
