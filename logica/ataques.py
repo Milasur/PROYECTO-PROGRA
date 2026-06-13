@@ -19,7 +19,7 @@ contraseña fue encontrada y muestra cuántos intentos tomó.
 """
 
 
-def simulacion_fuerza_bruta_recursiva(contraseña_objetivo, caracteres, longitud, intentos=1, contador=1):
+def simulacion_fuerza_bruta_recursiva(contraseña_objetivo, caracteres, longitud, intentos=0, contador=1):
     # Caso base: si la longitud llega a 0, significa que no se encontró la contraseña
     if contador > longitud:
         return f"La contraseña no pudo ser descifrada. Se realizaron {intentos} intentos."
@@ -27,13 +27,11 @@ def simulacion_fuerza_bruta_recursiva(contraseña_objetivo, caracteres, longitud
     # Evaluar todas las combinaciones de la longitud actual
     for opciones in itertools.product(caracteres, repeat=contador):
         intento_actual = ''.join(opciones)
+        intentos += 1
 
         # Caso de éxito
         if intento_actual == contraseña_objetivo:
             return f"Contraseña encontrada en {intentos} intentos: {intento_actual}"
-
-        # Si no coincide, sumamos un intento y seguimos
-        intentos += 1
 
     # Se llama a la función reduciendo la longitud y pasando los intentos acumulados
     return simulacion_fuerza_bruta_recursiva(contraseña_objetivo, caracteres, longitud, intentos, contador + 1)
