@@ -404,32 +404,48 @@ def abrir_f13(raiz):
 
 def abrir_historial(raiz):
     v = tk.Toplevel(raiz)
-    _setup_subventana(v, "Historial de Contraseñas", "700x400")
+    _setup_subventana(v, "Historial de Contraseñas", "700x450")
 
-    historial_data = historial.cargar_historial()
+    # Intentar cargar historial con manejo de errores
+    try:
+        historial_data = historial.cargar_historial()
+    except Exception as e:
+        historial_data = []
+        print(f"⚠️ Error al cargar historial: {e}")
 
-    if not historial_data:
-        _label(v, "No hay contraseñas registradas.").pack(pady=20)
-        return
+    # Frame para el contenedor principal
+    main_frame = tk.Frame(v, bg=BG_SUB)
+    main_frame.pack(fill="both", expand=True, padx=10, pady=10)
 
+    # Crear área de texto para mostrar registros (con scroll)
     texto = tk.Text(
-        v,
+        main_frame,
         bg=ENTRY_BG,
         fg=TEXTO,
-        font=("Courier", 10)
+        font=("Courier", 10),
+        height=15
     )
-    texto.pack(fill="both", expand=True, padx=10, pady=10)
+    texto.pack(fill="both", expand=True, pady=(0, 10))
 
-    for i, registro in enumerate(historial_data, start=1):
-        texto.insert(tk.END, f"Registro #{i}\n")
-        texto.insert(tk.END, f"Fecha: {registro['fecha']}\n")
-        texto.insert(tk.END, f"Contraseña: {registro['contrasena']}\n")
-        texto.insert(tk.END, f"Algoritmo: {registro['algoritmo']}\n")
-        texto.insert(tk.END, f"Longitud: {registro['longitud']}\n")
-        texto.insert(tk.END, f"Fortaleza: {registro['fortaleza']}\n")
-        texto.insert(tk.END, "-" * 50 + "\n")
+    if not historial_data:
+        texto.insert(tk.END, "No hay contraseñas registradas.")
+        texto.config(state="disabled")
+    else:
+        try:
+            for i, registro in enumerate(historial_data, start=1):
+                texto.insert(tk.END, f"Registro #{i}\n")
+                texto.insert(tk.END, f"Fecha: {registro['fecha']}\n")
+                texto.insert(tk.END, f"Contraseña: {registro['contrasena']}\n")
+                texto.insert(tk.END, f"Algoritmo: {registro['algoritmo']}\n")
+                texto.insert(tk.END, f"Longitud: {registro['longitud']}\n")
+                texto.insert(tk.END, f"Fortaleza: {registro['fortaleza']}\n")
+                texto.insert(tk.END, "-" * 50 + "\n")
+        except Exception as e:
+            texto.delete("1.0", tk.END)
+            texto.insert(tk.END, f"Error al mostrar registros: {e}")
+            print(f"⚠️ Error al mostrar registros: {e}")
 
-    texto.config(state="disabled")
+        texto.config(state="disabled")
 
     def _on_borrar():
         if not messagebox.askyesno("Confirmar", "¿Borrar todo el historial? Esta acción no se puede deshacer.", parent=v):
@@ -446,8 +462,9 @@ def abrir_historial(raiz):
             messagebox.showinfo(
                 "Información", "No había historial para borrar.", parent=v)
 
-    btn_frame = tk.Frame(v, bg=BG_SUB)
-    btn_frame.pack(fill="x", padx=10, pady=(0, 10))
+    # Frame para el botón (SIEMPRE visible al final)
+    btn_frame = tk.Frame(main_frame, bg=BG_SUB)
+    btn_frame.pack(fill="x", pady=(10, 0))
     _btn(btn_frame, "Borrar Historial", _on_borrar, color=ROJO).pack(side="right")
 
 

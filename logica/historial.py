@@ -12,7 +12,9 @@ import base64
 # Clave de 24 bytes para 3DES (¡en un proyecto real nunca hardcodear!)
 CLAVE_3DES = b"ProyectoTI1401ClaveSeg!!"  # exactamente 24 bytes
 IV_3DES = b"InicioIV"                  # exactamente 8 bytes
-ARCHIVO_HISTORIAL = "historial.enc"
+# Ruta absoluta basada en el directorio del proyecto
+ARCHIVO_HISTORIAL = os.path.join(os.path.dirname(
+    os.path.dirname(__file__)), "historial.enc")
 
 
 # ─────────────────────────────────────────────
@@ -128,14 +130,22 @@ def mostrar_historial() -> None:
 
 def borrar_historial() -> bool:
     """
-    Borra el archivo de historial cifrado si existe.
-    Retorna True si se borró el archivo, False si no existía.
+    Borra todo el contenido del historial cifrado.
+    Crea un archivo con una lista vacía cifrada.
+    Retorna True si se ejecutó correctamente, False si hubo error.
     """
-    if os.path.exists(ARCHIVO_HISTORIAL):
-        try:
-            os.remove(ARCHIVO_HISTORIAL)
-            print(f"🗑️ Historial eliminado ({ARCHIVO_HISTORIAL})")
-            return True
-        except OSError:
-            return False
-    return False
+    try:
+        # Crear un historial vacío (lista vacía en JSON)
+        historial_vacio = []
+        json_texto = json.dumps(historial_vacio, ensure_ascii=False, indent=2)
+        contenido_cifrado = cifrar_texto(json_texto)
+
+        # Escribir el archivo vacío cifrado
+        with open(ARCHIVO_HISTORIAL, "w", encoding="utf-8") as archivo:
+            archivo.write(contenido_cifrado)
+
+        print(f"🗑️ Historial eliminado ({ARCHIVO_HISTORIAL})")
+        return True
+    except Exception as e:
+        print(f"❌ Error al borrar historial: {e}")
+        return False
