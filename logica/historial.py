@@ -5,13 +5,13 @@ from Crypto.Cipher import DES3
 from Crypto.Util.Padding import pad, unpad
 import base64
 
-# ─────────────────────────────────────────────
+# ───────────────────────────────────°──────────
 # CONFIGURACIÓN DEL CIFRADO
 # ─────────────────────────────────────────────
 
 # Clave de 24 bytes para 3DES (¡en un proyecto real nunca hardcodear!)
 CLAVE_3DES = b"ProyectoTI1401ClaveSeg!!"  # exactamente 24 bytes
-IV_3DES    = b"InicioIV"                  # exactamente 8 bytes
+IV_3DES = b"InicioIV"                  # exactamente 8 bytes
 ARCHIVO_HISTORIAL = "historial.enc"
 
 
@@ -25,7 +25,7 @@ def cifrar_texto(texto: str) -> str:
     Retorna el texto cifrado codificado en base64.
     """
     cipher = DES3.new(CLAVE_3DES, DES3.MODE_CBC, IV_3DES)
-    datos  = pad(texto.encode("utf-8"), DES3.block_size)
+    datos = pad(texto.encode("utf-8"), DES3.block_size)
     cifrado = cipher.encrypt(datos)
     return base64.b64encode(cifrado).decode("utf-8")
 
@@ -35,8 +35,8 @@ def descifrar_texto(texto_cifrado: str) -> str:
     Descifra un texto cifrado en base64 usando 3DES en modo CBC.
     Retorna el texto plano original.
     """
-    cipher  = DES3.new(CLAVE_3DES, DES3.MODE_CBC, IV_3DES)
-    datos   = base64.b64decode(texto_cifrado)
+    cipher = DES3.new(CLAVE_3DES, DES3.MODE_CBC, IV_3DES)
+    datos = base64.b64decode(texto_cifrado)
     descifrado = unpad(cipher.decrypt(datos), DES3.block_size)
     return descifrado.decode("utf-8")
 
@@ -46,7 +46,7 @@ def descifrar_texto(texto_cifrado: str) -> str:
 # ─────────────────────────────────────────────
 
 def registrar_contrasena(contrasena: str, algoritmo: str,
-                          longitud: int, fortaleza: str) -> None:
+                         longitud: int, fortaleza: str) -> None:
     """
     Registra una contraseña generada en el historial cifrado.
 
@@ -61,11 +61,11 @@ def registrar_contrasena(contrasena: str, algoritmo: str,
 
     # Crear nuevo registro
     nuevo_registro = {
-        "contrasena" : contrasena,
-        "algoritmo"  : algoritmo,
-        "longitud"   : longitud,
-        "fortaleza"  : fortaleza,
-        "fecha"      : datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        "contrasena": contrasena,
+        "algoritmo": algoritmo,
+        "longitud": longitud,
+        "fortaleza": fortaleza,
+        "fecha": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     }
 
     historial.append(nuevo_registro)
@@ -124,3 +124,18 @@ def mostrar_historial() -> None:
 
     print(f"\n  Total de registros: {len(historial)}")
     print("═" * 60 + "\n")
+
+
+def borrar_historial() -> bool:
+    """
+    Borra el archivo de historial cifrado si existe.
+    Retorna True si se borró el archivo, False si no existía.
+    """
+    if os.path.exists(ARCHIVO_HISTORIAL):
+        try:
+            os.remove(ARCHIVO_HISTORIAL)
+            print(f"🗑️ Historial eliminado ({ARCHIVO_HISTORIAL})")
+            return True
+        except OSError:
+            return False
+    return False
